@@ -1,37 +1,40 @@
-import 'package:ab/main.dart';
+// ignore_for_file: use_key_in_widget_constructors, prefer_const_constructors
+
 import 'package:flutter/material.dart';
 
 import 'book_model.dart';
+import 'home_page.dart';
 
-List<ShoeModel> shoeList = ShoeModel.list;
+class Detail extends StatefulWidget {
+  final AlbumModel albumModel;
+  const Detail(this.albumModel);
+  @override
+  _DetailState createState() => _DetailState();
+}
 
-class Detail extends StatelessWidget {
-  const Detail({Key? key, required this.album}) : super(key: key);
-  final ShoeModel album;
-  final Color b = Colors.black;
-
+class _DetailState extends State<Detail> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         backgroundColor: Colors.white,
         appBar: AppBar(
-          actions: [
+          actions: const [
             Icon(
               Icons.save,
-              color: b,
+              color: Colors.black,
             ),
             SizedBox(
               width: 10,
             ),
             Icon(
               Icons.more_vert_sharp,
-              color: b,
+              color: Colors.black,
             ),
           ],
           leading: GestureDetector(
             child: Icon(
               Icons.arrow_back_ios_new,
-              color: b,
+              color: Colors.black,
             ),
             onTap: () {
               Navigator.of(context).push(
@@ -44,127 +47,139 @@ class Detail extends StatelessWidget {
           elevation: 0,
           backgroundColor: Colors.deepOrange[50],
         ),
-        body: ListView.builder(
-            itemCount: shoeList.length,
-            itemBuilder: (context, index) {
-              return detail(b, shoeList[index].name, shoeList[index].decs,
-                  shoeList[index].brand, shoeList[index].imgPath);
-            }));
-  }
-}
-
-class detail extends StatelessWidget {
-  const detail(
-    this.b,
-    this.name,
-    this.decs,
-    this.brand,
-    this.imgPath,
-  );
-
-  final Color b;
-
-  final String name;
-  final String decs;
-  final String brand;
-  final String imgPath;
-  @override
-  Widget build(BuildContext context) {
-    return Stack(children: [
-      Container(
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.only(
-              bottomLeft: Radius.circular(12),
-              bottomRight: Radius.circular(12),
-            ),
-            color: Colors.deepOrange[50]),
-        height: MediaQuery.of(context).size.height * 0.5,
-        child: Padding(
-          padding: const EdgeInsets.only(
-              top: 0.0, left: 120, bottom: 10, right: 120),
-          child: Column(
-            children: [
-              Image(
-                image: AssetImage(imgPath),
-                fit: BoxFit.none,
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              Text(
-                '$name',
-                style:
-                    const TextStyle(fontWeight: FontWeight.w900, fontSize: 25),
-              ),
-              Text(
-                "$brand",
-                style:
-                    const TextStyle(fontWeight: FontWeight.w400, fontSize: 20),
-              )
-            ],
-          ),
-        ),
-      ),
-      Container(
-        margin: EdgeInsets.only(top: 400, left: 30),
-        child: Text(
-          'Description',
-          style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 18),
-        ),
-      ),
-      Container(
-        margin: EdgeInsets.only(top: 440, left: 30),
-        child: Text(
-          decs,
-          style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 18),
-        ),
-      ),
-      Padding(
-        padding: const EdgeInsets.only(top: 550, left: 30, right: 20),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            ElevatedButton(
-                onPressed: () {},
-                style: TextButton.styleFrom(backgroundColor: Colors.white),
-                child: Row(
+        body: SingleChildScrollView(
+          physics: BouncingScrollPhysics(),
+          child: Stack(children: [
+            Container(
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.only(
+                    bottomLeft: Radius.circular(12),
+                    bottomRight: Radius.circular(12),
+                  ),
+                  color: Colors.deepOrange[50]),
+              height: MediaQuery.of(context).size.height * 0.6,
+              child: Padding(
+                padding: const EdgeInsets.only(
+                    top: 8.0, left: 120, bottom: 10, right: 120),
+                child: Column(
                   children: [
-                    Icon(
-                      Icons.menu_open_sharp,
-                      color: b,
+                    Image(
+                      image: AssetImage(widget.albumModel.imgPath),
+                      fit: BoxFit.fitHeight,
+                    ),
+                    SizedBox(
+                      height: 20,
                     ),
                     Text(
-                      "Preview",
-                      style: TextStyle(color: Colors.black),
+                      widget.albumModel.name,
+                      style: const TextStyle(
+                          fontWeight: FontWeight.w900, fontSize: 25),
                     ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Text(
+                      widget.albumModel.artist,
+                      style: const TextStyle(
+                          fontWeight: FontWeight.w400, fontSize: 20),
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        Icon(
+                          Icons.star,
+                          color: Colors.indigo[900],
+                        ),
+                        Icon(
+                          Icons.star,
+                          color: Colors.indigo[900],
+                        ),
+                        Icon(
+                          Icons.star,
+                          color: Colors.indigo[900],
+                        ),
+                        Icon(
+                          Icons.star,
+                          color: Colors.indigo[900],
+                        ),
+                        Icon(
+                          Icons.star,
+                          color: Colors.indigo[900],
+                        ),
+                      ],
+                    )
                   ],
-                )),
-            ElevatedButton(
-              onPressed: () {},
-              style: TextButton.styleFrom(backgroundColor: Colors.white),
+                ),
+              ),
+            ),
+            Container(
+              margin: EdgeInsets.only(top: 480, left: 30),
+              child: Text(
+                'Description',
+                style:
+                    const TextStyle(fontWeight: FontWeight.w800, fontSize: 20),
+              ),
+            ),
+            Container(
+              margin: EdgeInsets.only(top: 500, left: 30),
+              child: Text(
+                widget.albumModel.decs,
+                style:
+                    const TextStyle(fontWeight: FontWeight.w700, fontSize: 18),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(top: 610, left: 30, right: 20),
               child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Icon(
-                    Icons.message_sharp,
-                    color: b,
-                  ),
-                  Text(
-                    "Reviews",
-                    style: TextStyle(color: Colors.black),
-                  ),
+                  ElevatedButton(
+                      onPressed: () {},
+                      style:
+                          TextButton.styleFrom(backgroundColor: Colors.white),
+                      child: Row(
+                        children: const [
+                          Icon(
+                            Icons.menu_open_sharp,
+                            color: Colors.black,
+                          ),
+                          Text(
+                            "Preview",
+                            style: TextStyle(color: Colors.black),
+                          ),
+                        ],
+                      )),
+                  ElevatedButton(
+                    onPressed: () {},
+                    style: TextButton.styleFrom(backgroundColor: Colors.white),
+                    child: Row(
+                      children: const [
+                        Icon(
+                          Icons.message_sharp,
+                          color: Colors.black,
+                        ),
+                        Text(
+                          "Reviews",
+                          style: TextStyle(color: Colors.black),
+                        ),
+                      ],
+                    ),
+                  )
                 ],
               ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(top: 660, left: 120),
+              child: ElevatedButton(
+                  onPressed: () {},
+                  style:
+                      TextButton.styleFrom(backgroundColor: Colors.indigo[900]),
+                  child: Text("Buy now for \$29.67")),
             )
-          ],
-        ),
-      ),
-      Padding(
-        padding: const EdgeInsets.only(top: 600, left: 130, right: 10),
-        child: ElevatedButton(
-            onPressed: () {},
-            style: TextButton.styleFrom(backgroundColor: Colors.indigo[900]),
-            child: Text("Buy now for \$29.67")),
-      )
-    ]);
+          ]),
+        ));
   }
 }
